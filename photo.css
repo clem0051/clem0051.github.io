@@ -1,0 +1,87 @@
+#lightbox{
+	z-index: 1;
+	height: 100%;
+	width: 100%;
+	background-color: black;
+	position:fixed;
+	left: 0;
+	top: 0;
+	display:none;
+}
+.play {
+	top: 2%;
+	right: 47.5%;
+	color: white;
+	position:fixed;
+	padding: 20px;
+	display: visible;
+	transition: 6.0 sec ease;
+	cursor: pointer;
+	font-size: 25px;
+	font-weight: bold;
+	z-index:2;
+	background-color: #4c4e51;
+}
+
+.prev, .next {
+	top: 50%;
+	color: white;
+	position:fixed;
+	padding: 20px;
+	display: visible;
+	transition: 6.0 sec ease;
+	cursor: pointer;
+	font-size: 25px;
+	font-weight: bold;
+	z-index:2;
+	background-color: #4c4e51;
+}
+.prev:hover, .prev:focus, .next:hover, .next:focus{
+	color:#cccccc;
+	text-decoration: none;
+	cursor: pointer;
+}
+.next {
+	right: 10px;
+}
+.prev {
+	left: 10px;
+}
+.closeBox{
+	cursor: pointer;
+	color: white;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 25px;
+	font-weight: bold;
+	z-index: 2;
+}
+.closeBox:hover, .closeBox:focus{
+	color:#cccccc;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.boxContent img{
+	position:relative;
+	padding: 100px;
+	padding-bottom:15px;
+	margin: auto;
+	max-height:300px;
+	width:85%;
+}
+.fade{
+	-webkit-animation-name: fade;
+	-webkit-animation-duration: 1.5s;
+	animation-name: fase;
+	animation-duration: 1.5s;
+}
+@-webkit-keyframes fade {
+	from {opacity: .4}
+	to {opacity: 1}
+}
+@keyframes fade {
+	from {opacity: .4}
+	to {opacity: 1}
+}
