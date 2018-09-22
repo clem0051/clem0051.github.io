@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css"/>
+	<script type="text/javascript" src="todo.js"></script>
+</head>
+<body onload="initializeTable()">
+	<div id="nav">
+		<ul>
+			<li><a class="currentpage" href="todo.html">To-Do List</a></li>
+			<li><a href="pic.html">Photo Gallery</a></li>
+			<li><a href="bio.html">Bio</a></li>
+		</ul>
+	</div>
+	<div id="header">
+		<h2>Productivity: the Website</h2> <i>Where things get done</i>
+	</div>
+	<div id="content">
+		<h1>To-Do List</h1>
+		<table id="todolist" align="center"
+		<tr>
+			<th>Discription</th>
+			<th onclick="sortRow(1)">Creation Time</th>
+			<th onclick="sortRow(2)">Deadline</th>
+			<th onclick="sortRow(3)">Catagory</th>
+			<th onclick="sortRow(4)">Complete</th>
+			<th>Remove</th>
+		</tr>
+		</table>
+		<div id="newItem">
+			<h2>New Item</h2>
+			Discription: <input type="text" id="newDisc" value=""></input>
+			</br>Set a Deadline: <input type="datetime-local" id="newTime"></input>
+			</br>
+			<div id="catagories">
+				Select a Catagory: <input type="radio" name="cat" value="Chores" title="fuchsia">Chores
+				<input type="radio" name="cat" value="Work" title="orange">Work
+				<input type="radio" name="cat" value="Homework" title="lime">Homework
+				<input type="radio" name="cat" value="Family" title="red">Family
+			</div>
+			<input type="text" id="newCat" value="Catagory"></input>
+			<input type="color" id="newColor"></input>
+			</br><button value="Add New Catagory" onclick="newCat()">Add New Catagory</button>
+			</br><button onclick="addToTable()">Submit</button>
+		</div>
+	</div>
+
+</body>
+</html>
