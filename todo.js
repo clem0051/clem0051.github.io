@@ -1,11 +1,11 @@
-function initializeTable()
+function initializeTable() // fired at onload of the body and retrieved saved data
 {
 	var table = document.getElementById("todolist");
 	// Create a new row in the table at the end of the table
 	
 	for(var j=0; j < localStorage.getItem("rowID");j++)
 	{
-		(function(){
+		(function(){ // Nested Function to be able to preserve variables
 		if(window.localStorage.getItem(j+"cell1") != null)
 		{
 			var i = j;
@@ -19,7 +19,7 @@ function initializeTable()
 			var cell5 = row.insertCell(4);
 			var cell6 = row.insertCell(5);
 			cell6.addEventListener("click",function(){
-			if (confirm("Are you sure that you want to delete this item?"))
+			if (confirm("Are you sure that you want to delete this item?")) // Ask if you want to remove
 			{
 				console.log(cell6.parentNode.rowIndex + " " + i + " " + j);
 				localStorage.removeItem(i+"cell1");
@@ -33,13 +33,16 @@ function initializeTable()
 			}
 			}, false); // This is to delete rows
 
+			// Retrieve the Data from Local Storage
 			cell1.innerHTML = localStorage.getItem(i+"cell1");
-			cell2.innerHTML = localStorage.getItem(i+"cell2");
-			cell3.innerHTML = localStorage.getItem(i+"cell3");
+			cell2.innerHTML = localStorage.getItem(i+"cell2").toLocaleString();
+			cell3.innerHTML = localStorage.getItem(i+"cell3").toLocaleString();
 			cell4.innerHTML = localStorage.getItem(i+"cell4");
 			cell5.innerHTML = localStorage.getItem(i+"cell5");
 			cell6.innerHTML = localStorage.getItem(i+"cell6");
 			row.style.backgroundColor = localStorage.getItem(i+"color");
+			console.log("Wow");
+			notification(i);
 		}
 		}());
 	}
@@ -50,7 +53,7 @@ function addToTable()
 	//Find the table in the html document with id todolist
 	var table = document.getElementById("todolist");
 
-	var rowID = localStorage.getItem("rowID");
+	var rowID = localStorage.getItem("rowID"); // ID is used to save data individually
 	if (rowID == null)
 	{
 		rowID = 0;
@@ -82,6 +85,7 @@ function addToTable()
 	cell6.addEventListener("click",function(){
 	if (confirm("Are you sure that you want to delete this item?"))
 	{	
+		// Delete LocalStorage Data when row is removed
 		localStorage.removeItem(rowID+"cell1");
 		localStorage.removeItem(rowID+"cell2");
 		localStorage.removeItem(rowID+"cell3");
@@ -94,20 +98,23 @@ function addToTable()
 		}, false); // This is to delete rows
 	var d = new Date();
 
+	// Add data to page and to Storage Data
 	cell1.innerHTML = document.getElementById("newDisc").value;
 	localStorage.setItem(rowID+"cell1", cell1.innerHTML);
 	cell2.innerHTML = d.toLocaleString();
-	localStorage.setItem(rowID+"cell2", cell2.innerHTML);
-	cell3.innerHTML = document.getElementById("newTime").value.toLocaleString();
+	localStorage.setItem(rowID+"cell2", d);
+	cell3.innerHTML = document.getElementById("newTime").value;
 	localStorage.setItem(rowID+"cell3", cell3.innerHTML);
 	cell4.innerHTML = c;
 	localStorage.setItem(rowID+"cell4", cell4.innerHTML);
-	cell5.innerHTML = "<input type='checkbox' class='complete'></input>";
+	cell5.innerHTML = "<input type='checkbox' class='complete' id="+rowID+"cb"+
+	" onclick='updateCB("+rowID+")'></input>";
 	localStorage.setItem(rowID+"cell5", cell5.innerHTML);
 	cell6.innerHTML = "<button class='removeRow' id="+cell6+">x</button>";
 	localStorage.setItem(rowID+"cell6", cell6.innerHTML);
 	row.style.backgroundColor = rowColor;
 	localStorage.setItem(rowID+"color", rowColor);
+	setTimeout(notification,10000, rowID);
 	localStorage.setItem("rowID", ++rowID);
 }
 
@@ -191,13 +198,25 @@ function newCat()
 		p.name = "cat";
 		p.value = d;
 		p.title = d1;
-		var c = document.getElementById("catagories");
+		var c = document.getElementById("catagories"); // Create New Catigory choice
 		c.appendChild(p);
-		var f = document.createElement("p");
+		var f = document.createElement("p"); // Add Catagory name to the screen
 		f.textContent = p.value;
 		f.style.display = "inline";
 		c.appendChild(f);
 	}
+}
+function updateCB(x)
+{
+	var t = "";
+	if (document.getElementById(x+"cb").checked)
+	{
+		var t = "checked";
+	}
+	console.log(document.getElementById(x+"cb").checked);
+	localStorage.setItem(x+"cell5", "<input type='checkbox' "+
+	t+" class='complete' id='"+x+"cb"+
+	"' onclick='updateCB("+x+")'></input>");
 }
 
 //Light Box Functions
@@ -269,7 +288,7 @@ function closeBox()
 	play = false;
 	document.getElementById("lightbox").style.display = "none";
 }
-play = false;
+play = false; // Value used for slideshow playing
 function nextPic()
 {	
 	if(play == true)
@@ -284,10 +303,10 @@ function nextPic()
 			currentSlide = 1;
 		}
 		document.getElementById("theImage").src = getImage(currentSlide);
-		setTimeout(nextPic,1000);
+		setTimeout(nextPic,10000); // Wait 10 Sec to change
 	}
 }
-function playShow()
+function playShow() //Play the Slide Show
 {
 	if (play == true)
 	{
@@ -297,6 +316,42 @@ function playShow()
 	else{
 		play = true;
 		document.getElementsByClassName("play").innerHTML = "&#x25fc";
-		setTimeout(nextPic,1000);
+		setTimeout(nextPic,10000); // Wait 10 Sec to change
+	}
+}
+
+function notification(ID)
+{
+	console.log("called");
+	var d = new Date();
+	if(localStorage.getItem(ID+"cell3") != "")
+	{
+		console.log(localStorage.getItem(ID+"cell3")+","+d);
+		console.log(d, ID, localStorage.getItem(ID+"cell3"));
+		console.log(Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d));
+		if (Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) < 300000
+		&& Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) > 0)
+		{
+			var p = document.createElement("p");
+			p.id = "note";
+			p.onclick = function(){document.getElementById("noteSound").parentNode.removeChild(document.getElementById("noteSound"));
+				document.getElementById("note").parentNode.removeChild(document.getElementById("note"));};
+			p.textContent = "5 Minute Warning to Complete "+localStorage.getItem(ID+"cell1")+" by "
+			+localStorage.getItem(ID+"cell3")+"!!!";
+			p.style.backgroundColor = "red";
+			var c = document.getElementById("content"); // Create New Catigory choice
+			c.appendChild(p);
+			var f = document.createElement("audio"); // Add Catagory name to the screen
+			f.setAttribute("controls","controls")
+			f.setAttribute("autoplay","autoplay");
+			f.setAttribute("loop","loop");
+			f.setAttribute("src","sound.mp3");
+			f.style.visible = false;
+			f.id = "noteSound";
+			c.appendChild(f);
+		}
+		else if (Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) > 0){
+			setTimeout(notification,10000,ID);
+		}
 	}
 }
