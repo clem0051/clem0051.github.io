@@ -5,6 +5,9 @@ html {
 	font-Family: sans-serif;
 	background-color: #5e7eb2;
 }
+body{
+	font-size: 1rem;
+}
 #nav {
 	float: left;
 	position: fixed;
@@ -40,7 +43,7 @@ a:hover:not(.currentpage) {
 }
 #content {
 	margin-left: 200px;
-	padding: 1px;
+	padding: 5px;
 	text-align: center;
 	background-color: #7c91b2;
 	min-height: 400px;
