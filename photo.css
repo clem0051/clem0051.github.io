@@ -67,9 +67,11 @@
 	position:relative;
 	padding: 100px;
 	padding-bottom:15px;
+	left: 5%;
 	margin: auto;
-	max-height:300px;
-	width:85%;
+	max-height:400px;
+	width: 75%;
+	height:auto;
 }
 .fade{
 	-webkit-animation-name: fade;
