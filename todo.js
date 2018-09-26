@@ -19,6 +19,7 @@ function initializeTable() // fired at onload of the body and retrieved saved da
 			var cell5 = row.insertCell(4);
 			var cell6 = row.insertCell(5);
 			cell6.addEventListener("click",function(){
+			// This will remove all data of the row deleted
 			if (confirm("Are you sure that you want to delete this item?")) // Ask if you want to remove
 			{
 				console.log(cell6.parentNode.rowIndex + " " + i + " " + j);
@@ -42,7 +43,7 @@ function initializeTable() // fired at onload of the body and retrieved saved da
 			cell6.innerHTML = localStorage.getItem(i+"cell6");
 			row.style.backgroundColor = localStorage.getItem(i+"color");
 			console.log("Wow");
-			notification(i);
+			notification(i); // Begin the call to the notification
 		}
 		}());
 	}
@@ -114,13 +115,14 @@ function addToTable()
 	localStorage.setItem(rowID+"cell6", cell6.innerHTML);
 	row.style.backgroundColor = rowColor;
 	localStorage.setItem(rowID+"color", rowColor);
+	// Begin notification check after 10 sec
 	setTimeout(notification,10000, rowID);
 	localStorage.setItem("rowID", ++rowID);
 }
 
 function sortRow(n)
 {
-	// Bubble Sort 
+	// Sort the rows: I implmented this before I knew about the way we learned in class
 	var table, rows, switching, x, y, sorted = false;
 	table = document.getElementById("todolist");
 	var rows = table.rows;
@@ -136,7 +138,7 @@ function sortRow(n)
 			console.log("	Loop: 2");
 			x = rows[i].getElementsByTagName("td")[n];
 			y = rows[i+1].getElementsByTagName("td")[n];
-			if (n == 4) // If checking checkboxs
+			if (n == 4) // If checking checkboxs, column 5 (0 is thr first)
 			{
 				x = x.children[0].checked;
 				y = y.children[0].checked;
@@ -154,7 +156,7 @@ function sortRow(n)
 					t = true;
 				}
 			}
-			else{
+			else{ // If checking anything else
 				console.log("	x: "+x.innerHTML + "; i : " + i + " : " + rows.length);
 				console.log("	y: "+y.innerHTML);
 				if (y.innerHTML.toLowerCase() < x.innerHTML.toLowerCase() && order == "up")
@@ -171,15 +173,18 @@ function sortRow(n)
 				}
 			}
 		}
+		// If the sort has been put through twice (its going down) and there are no swaps, then we are done
 		if (t == false && switching == false && order == "down")
 		{
 			break;
 		}
+		// No flipping was done, so flip the order
 		if (t == false && order == "up" && switching == false)
 		{
 			console.log("down");
 			order = "down"; // Already sorted, so flip orientation
 		}
+		// If everything has been put into order, you are done
 		if (t == true && switching == false)
 		{
 			break; // You are done!!
@@ -187,7 +192,7 @@ function sortRow(n)
 	}
 }
 
-function newCat()
+function newCat() // To create a new catagory
 {
 	var d = document.getElementById("newCat").value;
 	var d1 = document.getElementById("newColor").value;
@@ -206,7 +211,7 @@ function newCat()
 		c.appendChild(f);
 	}
 }
-function updateCB(x)
+function updateCB(x) // Update Storage when checkbox clicked
 {
 	var t = "";
 	if (document.getElementById(x+"cb").checked)
@@ -221,22 +226,42 @@ function updateCB(x)
 
 //Light Box Functions
 var currentSlide = 1;
-function getImage(x)
+function getImage(x) // Returns the image name
 {
 	return "p"+x+".jpg";
 }
 
-function CurrentSlide(x)
+function CurrentSlide(x) // Updates the Current Slide in the light box
 {
 	currentSlide = x;
 	console.log(getImage(currentSlide));
-	document.getElementById("theImage").src = getImage(currentSlide);
+	// Used to allow for animation on changed image
+	document.getElementById("theImage").parentNode.removeChild(document.getElementById("theImage"));
+	var n = document.createElement("img");
+	n.src = getImage(currentSlide);
+	n.id = "theImage";
+	n.className = "imgf";
+	var n1 = document.getElementsByClassName("boxContent");
+	n1[0].appendChild(n);
+	var y = document.getElementsByClassName("light");
+	// This allows for the highlighing of the lightbox thumbnails
+	for(var i = 0; i < y.length; i++) 
+	{
+		if (i+1 == x)
+		{
+			y[i].className = "light fade select";
+		}
+		else
+		{
+			y[i].className = "light fade";
+		}
+	}
 }
-function nextSlide(x,event)
+function nextSlide(x,event) // shifts the slides accordingly
 {
 	if(event != null)
 	{
-		if(event.keyCode == 37)
+		if(event.keyCode == 37) // left arrow key
 		{
 			currentSlide += x;
 		}
@@ -260,36 +285,36 @@ function nextSlide(x,event)
 	}
 	if(event != null)
 	{
-		if(event.keyCode == 37)
+		if(event.keyCode == 37) // left arrow key
 		{
-			document.getElementById("theImage").src = getImage(currentSlide);
+			CurrentSlide(currentSlide);
 		}
-		else if (event.keyCode == 39)
+		else if (event.keyCode == 39) // right arrow key
 		{
-			document.getElementById("theImage").src = getImage(currentSlide);
+			CurrentSlide(currentSlide);
 		}
-		else if (event.keyCode == 27)
+		else if (event.keyCode == 27) // ESC key
 		{
 			closeBox();
 		}
 	}
 	else{
-		document.getElementById("theImage").src = getImage(currentSlide);
+		CurrentSlide(currentSlide);
 	}
 }
-function openBox()
+function openBox() // Open the Lightbox
 {
 	console.log("Sooo..");
 	play = false;
 	document.getElementById("lightbox").style.display = "block";
 }
-function closeBox()
+function closeBox() // Close the Lightbox
 {
 	play = false;
 	document.getElementById("lightbox").style.display = "none";
 }
 play = false; // Value used for slideshow playing
-function nextPic()
+function nextPic() // Get the next picture for the slide show
 {	
 	if(play == true)
 	{
@@ -302,7 +327,7 @@ function nextPic()
 		{
 			currentSlide = 1;
 		}
-		document.getElementById("theImage").src = getImage(currentSlide);
+		CurrentSlide(currentSlide);
 		setTimeout(nextPic,10000); // Wait 10 Sec to change
 	}
 }
@@ -320,28 +345,28 @@ function playShow() //Play the Slide Show
 	}
 }
 
-function notification(ID)
+function notification(ID) // Check For notification
 {
 	console.log("called");
 	var d = new Date();
-	if(localStorage.getItem(ID+"cell3") != "")
+	if(localStorage.getItem(ID+"cell3") != "") // Check for a deadline
 	{
 		console.log(localStorage.getItem(ID+"cell3")+","+d);
 		console.log(d, ID, localStorage.getItem(ID+"cell3"));
 		console.log(Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d));
 		if (Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) < 300000
-		&& Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) > 0)
+		&& Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) > 0) // if the deadline is within 5 min...
 		{
-			var p = document.createElement("p");
+			var p = document.createElement("p"); // Create Notification
 			p.id = "note";
 			p.onclick = function(){document.getElementById("noteSound").parentNode.removeChild(document.getElementById("noteSound"));
-				document.getElementById("note").parentNode.removeChild(document.getElementById("note"));};
+				document.getElementById("note").parentNode.removeChild(document.getElementById("note"));}; // Delete sound when notification is deleted
 			p.textContent = "5 Minute Warning to Complete "+localStorage.getItem(ID+"cell1")+" by "
 			+localStorage.getItem(ID+"cell3")+"!!!";
 			p.style.backgroundColor = "red";
-			var c = document.getElementById("content"); // Create New Catigory choice
+			var c = document.getElementById("content"); 
 			c.appendChild(p);
-			var f = document.createElement("audio"); // Add Catagory name to the screen
+			var f = document.createElement("audio"); // Add Sound
 			f.setAttribute("controls","controls")
 			f.setAttribute("autoplay","autoplay");
 			f.setAttribute("loop","loop");
@@ -351,7 +376,7 @@ function notification(ID)
 			c.appendChild(f);
 		}
 		else if (Date.parse(localStorage.getItem(ID+"cell3")) - Date.parse(d) > 0){
-			setTimeout(notification,10000,ID);
+			setTimeout(notification,10000,ID); // If not time to create notifiation, check in 10 sec
 		}
 	}
 }
