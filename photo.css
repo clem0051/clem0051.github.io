@@ -73,17 +73,27 @@
 	width: 75%;
 	height:auto;
 }
-.fade{
-	-webkit-animation-name: fade;
-	-webkit-animation-duration: 1.5s;
-	animation-name: fase;
-	animation-duration: 1.5s;
+table td img{
+	opacity: .4;
+	transition: 3sec;
 }
-@-webkit-keyframes fade {
-	from {opacity: .4}
-	to {opacity: 1}
+.select{
+	opacity: 1;
+}
+
+.fade:hover{
+	-webkit-animation-name: fade;
+	-webkit-animation-duration: 1;
+	animation-name: fade;
+	animation-duration: 1s;
+}
+.imgf{
+	-webkit-animation-name: fade;
+	-webkit-animation-duration: 1;
+	animation-name: fade;
+	animation-duration: 1s;
 }
 @keyframes fade {
-	from {opacity: .4}
-	to {opacity: 1}
+	from {opacity: .4;}
+	to {opacity: 1;}
 }
