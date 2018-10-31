@@ -1,0 +1,10 @@
+#mapid { 
+	height: 300px; 
+	width: 500px;
+}
+#mapid .fullscreen{ 
+	height: 100%; 
+	width: 100%;
+	background-color: black;
+	padding: 20px;
+}
